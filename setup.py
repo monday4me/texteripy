@@ -34,7 +34,7 @@ def get_setup_kwargs():
 
     kwargs = dict(
         name="texteripy",
-        version="0.0.1",
+        version="0.0.2",
         author="lor3m",
         author_email="hiddenlorem@pm.me",
         license="LGPLv3",
