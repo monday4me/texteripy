@@ -54,6 +54,7 @@ class Texterify:
         full_url = f"{self.api_base_url}{url}"
         try:
             if method == "GET" and params:
+                params = [(k, str(v).lower() if isinstance(v, bool) else v) for k, v in params.items()]
                 full_url += f"?{urllib.parse.urlencode(params)}"
 
             options = {
@@ -122,14 +123,23 @@ class Texterify:
         """
         return await self._make_request(url, "DELETE", body, False)
 
-    async def get_keys(self, project_id: str) -> Any:
+    async def get_keys(self, project_id: str, page: int = 1, per_page: int = 10, case_sensitive: bool = False,
+        only_html_enabled: bool = False, only_untranslated: bool = False, only_with_overwrites: bool = False
+    ) -> Any:
         """
         Retrieve keys for a given project.
 
         :param project_id: The ID of the project.
         :return: A list of keys for the project.
         """
-        return await self._get_request(f"projects/{project_id}/keys")
+        return await self._get_request(f"projects/{project_id}/keys", {
+            "page": page,
+            "per_page": per_page,
+            "case_sensitive": str(case_sensitive).lower(),
+            "only_html_enabled": str(only_html_enabled).lower(),
+            "only_untranslated": str(only_untranslated).lower(),
+            "only_with_overwrites": str(only_with_overwrites).lower(),
+        })
 
     async def create_key(self, project_id: str, name: str, description: str,
                          default_language_translation: Optional[str] = None) -> Any:
@@ -281,4 +291,11 @@ class Texterify:
             "translation": {
                 "content": content
             }
+        })
+
+    async def get_languages(self, project_id: str, page: int = 1, per_page: int = 10, search: str | Any = None) -> Any:
+        return await self._get_request(f"projects/{project_id}/languages", {
+            "page": page,
+            "per_page": per_page,
+            "search": search if search else ""
         })
