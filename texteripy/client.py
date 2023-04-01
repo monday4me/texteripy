@@ -135,10 +135,10 @@ class Texterify:
         return await self._get_request(f"projects/{project_id}/keys", {
             "page": page,
             "per_page": per_page,
-            "case_sensitive": str(case_sensitive).lower(),
-            "only_html_enabled": str(only_html_enabled).lower(),
-            "only_untranslated": str(only_untranslated).lower(),
-            "only_with_overwrites": str(only_with_overwrites).lower(),
+            "case_sensitive": case_sensitive,
+            "only_html_enabled": only_html_enabled,
+            "only_untranslated": only_untranslated,
+            "only_with_overwrites": only_with_overwrites,
         })
 
     async def create_key(self, project_id: str, name: str, description: str,
